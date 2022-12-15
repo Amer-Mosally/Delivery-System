@@ -3,31 +3,42 @@ import boto3
 
 def lambda_handler(event, context):
     data = json.loads(event['body'])
-    x = data['x']   #json.loads(event['x'])
-    y = data['y']    #json.loads(event['y'])
-    
-    ID =str(x)+"div"+str(y)  #Stored in DB as "1add2"
+    ID = data['ID']   
+    x = data['x']
+    y = data['y']
+    #time = data['time']
 
-    # this will create dynamodb resource object and dynamodb is resource name
+
+    method = event['httpMethod']
+
+    # this will create dynamodb resource object and 'dynamodb' is resource name
     dynamodb = boto3.resource('dynamodb')
     # this will search for dynamoDB table 
-    table = dynamodb.Table("HW3_table")
+    table = dynamodb.Table("shipment_management")
     
-    
-    try:
-        response = table.get_item(Key={'ID': ID})
-        res = int(response['Item']['result'])
-    except Exception as error:
-        print("No item! Adding new Item to database")
-        res = int(x) / int(y)
-        table.put_item(Item={'ID': ID,'result':res})
 
-    JsonValue = {
-        "x": x,
-        "y": y,
-        "op": "div",
-        "result": res
-    }
+    if method == "GET":
+        all = table.scan()
+        all = all['Items']  #retrun list of items
+        JsonValue = str(all)
+
+    if method == "POST":
+        try:
+            response = table.get_item(Key={'ID': ID})
+            response = response['Item']['ID']
+        except Exception as error:
+            table.put_item(Item={'ID': ID,'x':x,'y':y})
+            JsonValue = "The ID has been added to the database!"
+        if response == ID:
+                JsonValue = "The ID already in the database!"
+
+                
+    if method == "DELETE":
+        response = table.delete_item(
+            Key={'ID': ID}
+        )
+        JsonValue = "Courier has been deleted"
+    
     return {
         'statusCode': 200,
         'body': json.dumps(JsonValue)

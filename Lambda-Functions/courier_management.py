@@ -5,6 +5,7 @@ def lambda_handler(event, context):
     data = json.loads(event['body'])
     ID = data['ID']   
     name = data['name']    
+
     method = event['httpMethod']
 
     # this will create dynamodb resource object and 'dynamodb' is resource name
@@ -24,14 +25,13 @@ def lambda_handler(event, context):
             response = table.get_item(Key={'ID': ID})
             response = response['Item']['ID']
         except Exception as error:
-            if response == ID:
+            table.put_item(Item={'ID': ID,'name':name})
+            JsonValue = "The ID has been added to the database!"
+        if response == ID:
                 JsonValue = "The ID already in the database!"
-            else:
-                table.put_item(Item={'ID': ID,'name':name})
-                JsonValue = "The ID has been added to the database!"
+
 
     if method == "DELETE":
-        # NEEED More code>>> delete by the ID 
         response = table.delete_item(
             Key={'ID': ID}
         )

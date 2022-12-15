@@ -205,9 +205,9 @@ resource "aws_dynamodb_table" "result" {
   billing_mode   = "PROVISIONED"
   read_capacity  = "5"
   write_capacity = "5"
-  hash_key       = "ID"
+  hash_key       = "PackageID"
   attribute {
-    name = "ID"
+    name = "PackageID"
     type = "N" #int
   }
 }
