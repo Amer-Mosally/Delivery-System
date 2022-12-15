@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "DynamoDB" {
       "dynamodb:PutItem",
       "dynamodb:GetItem",
       "dynamodb:DeleteItem",
-      "dynamodb:Scan"
+      "dynamodb:Scan",
     ]
     effect    = "Allow"
     resources = ["arn:aws:dynamodb:*:*:table/*"]

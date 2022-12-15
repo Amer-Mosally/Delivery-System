@@ -35,10 +35,8 @@ def lambda_handler(event, context):
 
                 
     if method == "DELETE":
-        response = table.delete_item(
-            Key={'ID': PackageID}
-        )
-        JsonValue = "Courier has been deleted"
+        #test
+        JsonValue = "The result table has been deleted"
     
     return {
         'statusCode': 200,

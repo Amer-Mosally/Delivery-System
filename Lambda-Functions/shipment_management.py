@@ -3,7 +3,8 @@ import boto3
 
 def lambda_handler(event, context):
     data = json.loads(event['body'])
-    ID = data['ID']   
+    ID = data['ID'] 
+    date = data['date'] 
     x = data['x']
     y = data['y']
     #time = data['time']
@@ -27,7 +28,7 @@ def lambda_handler(event, context):
             response = table.get_item(Key={'ID': ID})
             response = response['Item']['ID']
         except Exception as error:
-            table.put_item(Item={'ID': ID,'x':x,'y':y})
+            table.put_item(Item={'ID': ID, "date":date, 'x':x,'y':y})
             JsonValue = "The ID has been added to the database!"
         if response == ID:
                 JsonValue = "The ID already in the database!"
@@ -37,7 +38,7 @@ def lambda_handler(event, context):
         response = table.delete_item(
             Key={'ID': ID}
         )
-        JsonValue = "Courier has been deleted"
+        JsonValue = "Shipment has been deleted"
     
     return {
         'statusCode': 200,
