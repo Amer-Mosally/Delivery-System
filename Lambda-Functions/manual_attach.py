@@ -7,8 +7,6 @@ def lambda_handler(event, context):
     CourierID = data['CourierID']   
     x = data['x']
     y = data['y']
-    #time = data['time']
-
 
     method = event['httpMethod']
 
@@ -16,7 +14,6 @@ def lambda_handler(event, context):
     dynamodb = boto3.resource('dynamodb')
     # this will search for dynamoDB table 
     table = dynamodb.Table("result")
-    
 
     if method == "GET":
         all = table.scan()
