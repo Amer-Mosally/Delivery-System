@@ -2,12 +2,16 @@ import json
 import boto3
 
 def lambda_handler(event, context):
-    data = json.loads(event['body'])
-    ID = data['ID']   
-    name = data['name']    
-    x = data['x']
-    y = data['y']
-    
+
+    try:
+        data = json.loads(event['body'])
+        ID = data['ID']   
+        name = data['name']    
+        x = data['x']
+        y = data['y']
+    except:
+        print()
+        
     method = event['httpMethod']
 
     # this will create dynamodb resource object and 'dynamodb' is resource name
