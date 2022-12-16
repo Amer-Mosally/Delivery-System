@@ -1,7 +1,7 @@
 provider "aws" {
   region     = "us-east-1"
-  access_key = ""
-  secret_key = ""
+  access_key = "AKIARR7QVRJU2XNTGYV7"
+  secret_key = "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"
 }
 data "archive_file" "lambda-functions" {
   type        = "zip"
@@ -238,61 +238,61 @@ resource "aws_dynamodb_table" "result" {
   }
 }
 
-resource "aws_vpc" "main" {
-  cidr_block           = "10.0.0.0/16"
-  instance_tenancy     = "default"
-  enable_dns_hostnames = true
-  tags = {
-    Name = "main"
-  }
-}
+# resource "aws_vpc" "main" {
+#   cidr_block           = "10.0.0.0/16"
+#   instance_tenancy     = "default"
+#   enable_dns_hostnames = true
+#   tags = {
+#     Name = "main"
+#   }
+# }
 
-resource "aws_subnet" "my_subnet" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.1.0/24"
-
-
-  tags = {
-    Name = "subnet"
-  }
-}
+# resource "aws_subnet" "my_subnet" {
+#   vpc_id            = aws_vpc.main.id
+#   cidr_block        = "10.0.1.0/24"
 
 
-resource "aws_security_group" "vpc_secgroup" {
-    ingress {
-        from_port        = 22
-        to_port          = 22
-        protocol         = "tcp"
-        cidr_blocks      = ["0.0.0.0/0"]
-    }
-
-    ingress {
-        from_port   = 80
-        to_port     = 80
-        protocol    = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-
-    egress {
-        from_port   = 0
-        to_port     = 0
-        protocol    = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-}
-
-resource "aws_instance" "infraserver" {
-  ami           = "ami-0b0dcb5067f052a63"
-  instance_type = "t2.micro"
-    subnet_id   = aws_subnet.my_subnet.id
-  associate_public_ip_address = true
-    vpc_security_group_ids = [aws_security_group.vpc_secgroup.id]
+#   tags = {
+#     Name = "subnet"
+#   }
+# }
 
 
+# resource "aws_security_group" "vpc_secgroup" {
+#     ingress {
+#         from_port        = 22
+#         to_port          = 22
+#         protocol         = "tcp"
+#         cidr_blocks      = ["0.0.0.0/0"]
+#     }
 
-  tags = {
-    Name = "InfraServer"
-  }
-}
+#     ingress {
+#         from_port   = 80
+#         to_port     = 80
+#         protocol    = "tcp"
+#         cidr_blocks = ["0.0.0.0/0"]
+#     }
+
+#     egress {
+#         from_port   = 0
+#         to_port     = 0
+#         protocol    = "-1"
+#         cidr_blocks = ["0.0.0.0/0"]
+#     }
+# }
+
+# resource "aws_instance" "infraserver" {
+#   ami           = "ami-0b0dcb5067f052a63"
+#   instance_type = "t2.micro"
+#     subnet_id   = aws_subnet.my_subnet.id
+#   associate_public_ip_address = true
+#     vpc_security_group_ids = [aws_security_group.vpc_secgroup.id]
+
+
+
+#   tags = {
+#     Name = "InfraServer"
+#   }
+# }
 
 
