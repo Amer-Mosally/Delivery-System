@@ -1,7 +1,7 @@
 provider "aws" {
   region     = "us-east-1"
-  access_key = "AKIARR7QVRJU2XNTGYV7"
-  secret_key = "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"
+  access_key = ""
+  secret_key = ""
 }
 data "archive_file" "lambda-functions" {
   type        = "zip"
