@@ -2,11 +2,15 @@ import json
 import boto3
 
 def lambda_handler(event, context):
-    data = json.loads(event['body'])
-    PackageID = data['PackageID']   
-    CourierID = data['CourierID']   
-    x = data['x']
-    y = data['y']
+    try:
+        data = json.loads(event['body'])
+        PackageID = data['PackageID']   
+        CourierID = data['CourierID']
+        date = data['date']   
+        x = data['x']
+        y = data['y']
+    except:
+        print()
 
     method = event['httpMethod']
 
@@ -25,7 +29,7 @@ def lambda_handler(event, context):
             response = table.get_item(Key={'PackageID': PackageID})
             response = response['Item']['PackageID']
         except Exception as error:
-            table.put_item(Item={'PackageID': PackageID, 'CourierID': CourierID,'x':x,'y':y})
+            table.put_item(Item={'PackageID': PackageID, 'CourierID': CourierID, 'date': date, 'x':x,'y':y})
             JsonValue = "The ID has been added to the database!"
         if response == PackageID:
                 JsonValue = "The Package ID already in the database!"

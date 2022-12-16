@@ -2,17 +2,19 @@ import json
 import boto3
 
 def lambda_handler(event, context):
-    data = json.loads(event['body'])
-    send = data['send']
-
+    try:
+        data = json.loads(event['body'])
+        send = data['send']
+    except:
+        print()
     method = event['httpMethod']
-
+    
     # this will create dynamodb resource object and 'dynamodb' is resource name
     dynamodb = boto3.resource('dynamodb')
     # this will search for dynamoDB table 
     table = dynamodb.Table("result")
-    
-    if method == "GET":
+    flag = "Error!"
+    if method == "GET" and send == "TRUE":
         all = table.scan()
         all = str(all['Items'])  #retrun list of items
         
@@ -24,8 +26,10 @@ def lambda_handler(event, context):
 
         response = client.send_email(Source = "musalli.amer@gmail.com",
                 Destination = {"ToAddresses": ["musalli.amer@gmail.com"]}, Message = message)
+                
+        flag = "The email has been send!"
     
     return {
         'statusCode': 200,
-        'body': json.dumps("The email has been send!")
+        'body': json.dumps(flag)
     }
