@@ -15,8 +15,6 @@ def lambda_handler(event, context):
     # this will search for dynamoDB table 
     table = dynamodb.Table("courier_management")
     
-
-    
     if method == "GET":
         all = table.scan()
         all = all['Items']  #retrun list of items
@@ -31,7 +29,6 @@ def lambda_handler(event, context):
             JsonValue = "The ID has been added to the database!"
         if response == ID:
                 JsonValue = "The ID already in the database!"
-
 
     if method == "DELETE":
         response = table.delete_item(

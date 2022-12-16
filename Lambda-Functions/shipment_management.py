@@ -7,8 +7,6 @@ def lambda_handler(event, context):
     date = data['date'] 
     x = data['x']
     y = data['y']
-    #time = data['time']
-
 
     method = event['httpMethod']
 
@@ -17,7 +15,6 @@ def lambda_handler(event, context):
     # this will search for dynamoDB table 
     table = dynamodb.Table("shipment_management")
     
-
     if method == "GET":
         all = table.scan()
         all = all['Items']  #retrun list of items
@@ -33,7 +30,6 @@ def lambda_handler(event, context):
         if response == ID:
                 JsonValue = "The ID already in the database!"
 
-                
     if method == "DELETE":
         response = table.delete_item(
             Key={'ID': ID}
