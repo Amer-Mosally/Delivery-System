@@ -1,0 +1,53 @@
+Courier Service:
+	-post the name of the courier
+	-get all the names
+	-delete one person
+
+Shipment Service:
+	-post the package ID (name) and location 
+	-get all packages
+	-delete the package from the database
+
+Manual Attach:
+	-post (Package + Courier)
+	-get all
+	#-delete all (after get all + passing argument 'delete')
+
+Database:
+	1)Courier  -  ID | X | Y | Courier_name 
+	2)Shipment -  ID | X | Y | #Time_to_deliver (by the day) 
+	3)Result   -  Courier_name | Shipment_ID | X | Y
+
+
+
+JSON: 
+
+courier_management
+{
+    "ID":2018,
+    "name":"Amer",
+    "x":"2",
+    "y":"3",
+    "available": true
+}
+
+shipment_management
+{
+    "ID":2018,
+    "date":"2022/12/18",
+    "x":"2.66",
+    "y":"34.2"
+}
+
+manual_attach
+{
+    "PackageID":2334018,
+    "CourierID":"4346",
+    "x":"3",
+    "y":"3.4"
+}
+
+ec2/assign GET Request
+{
+"date": "2022/12/18"
+}
