@@ -2,20 +2,15 @@ import json
 import boto3
 
 def lambda_handler(event, context):
-    try:
-        data = json.loads(event['body'])
-        send = data['send']
-    except Exception as error:
-        print(error)
-        
     method = event['httpMethod']
     
     # this will create dynamodb resource object and 'dynamodb' is resource name
     dynamodb = boto3.resource('dynamodb')
     # this will search for dynamoDB table 
     table = dynamodb.Table("result")
+    
     flag = "Error!"
-    if method == "GET" and send == "TRUE":
+    if method == "GET":
         all = table.scan()
         all = str(all['Items'])  #retrun list of items
         
