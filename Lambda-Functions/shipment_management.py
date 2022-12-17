@@ -8,8 +8,9 @@ def lambda_handler(event, context):
         date = data['date'] 
         x = data['x']
         y = data['y']
-    except:
-        print()
+    except Exception as error:
+        print(error)
+        
     method = event['httpMethod']
 
     # this will create dynamodb resource object and 'dynamodb' is resource name

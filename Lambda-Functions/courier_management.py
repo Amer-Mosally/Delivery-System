@@ -10,8 +10,8 @@ def lambda_handler(event, context):
         x = data['x']
         y = data['y']
         available = data['available']
-    except:
-        print()
+    except Exception as error:
+        print(error)
         
     method = event['httpMethod']
 

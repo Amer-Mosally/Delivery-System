@@ -9,8 +9,8 @@ def lambda_handler(event, context):
         date = data['date']   
         x = data['x']
         y = data['y']
-    except:
-        print()
+    except Exception as error:
+        print(error)
 
     method = event['httpMethod']
 
@@ -33,12 +33,7 @@ def lambda_handler(event, context):
             JsonValue = "The ID has been added to the database!"
         if response == PackageID:
                 JsonValue = "The Package ID already in the database!"
-
-                
-    if method == "DELETE":
-        #test
-        JsonValue = "The result table has been deleted"
-    
+  
     return {
         'statusCode': 200,
         'body': json.dumps(JsonValue)

@@ -5,8 +5,9 @@ def lambda_handler(event, context):
     try:
         data = json.loads(event['body'])
         send = data['send']
-    except:
-        print()
+    except Exception as error:
+        print(error)
+        
     method = event['httpMethod']
     
     # this will create dynamodb resource object and 'dynamodb' is resource name
