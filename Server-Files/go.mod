@@ -3,6 +3,7 @@ module server-Files/code
 go 1.19
 
 require (
+	github.com/aws/aws-sdk-go v1.44.162 // indirect
 	github.com/aws/aws-sdk-go-v2 v1.17.3 // indirect
 	github.com/aws/aws-sdk-go-v2/config v1.18.5 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.13.5 // indirect
