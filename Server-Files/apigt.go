@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"math"
@@ -210,7 +211,7 @@ func assign(w http.ResponseWriter, req *http.Request) {
 }
 
 func calculate(w http.ResponseWriter, req *http.Request) {
-
+	fmt.Println("this is calcuate function")
 }
 
 func main() {

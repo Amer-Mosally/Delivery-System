@@ -387,7 +387,6 @@ provisioner "remote-exec" {
         inline = [
             "sudo yum install golang -y",
             "go build apigt.go",
-            "sudo ./apigt",
         ]
 
         connection {

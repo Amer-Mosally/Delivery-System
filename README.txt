@@ -7,7 +7,8 @@ HOW TO RUN:
 export AWS_SECRET_ACCESS_KEY=********************
 export AWS_REGION=us-east-1
 my_ip=$(curl http://checkip.amazonaws.com)
-export my_ip"
+export my_ip
+sudo ./apigt"
 4. Trigger the assign function by hitting the end point: ec2_public_ip/assign with this body:
 {
 "date": "year/month/day"
