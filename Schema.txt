@@ -1,22 +1,21 @@
 Courier Service:
-	-post the name of the courier
-	-get all the names
-	-delete one person
+	-POST the name of the courier
+	-GET all the couriers
+	-DELETE a courier
 
 Shipment Service:
-	-post the package ID (name) and location 
-	-get all packages
-	-delete the package from the database
+	-POST the package ID (name) and location 
+	-GET all packages
+	-DELETE a package from the database
 
 Manual Attach:
-	-post (Package + Courier)
-	-get all
-	#-delete all (after get all + passing argument 'delete')
+	-POST (Package + Courier)
+	-GET all the result
 
 Database:
-	1)Courier  -  ID | X | Y | Courier_name 
-	2)Shipment -  ID | X | Y | #Time_to_deliver (by the day) 
-	3)Result   -  Courier_name | Shipment_ID | X | Y
+	1)Courier  -  ID | Courier_name | X | Y | available
+	2)Shipment -  ID | date | X | Y | 
+	3)Result   -  Courier_name | Shipment_ID | X | Y | date
 
 
 
