@@ -8,7 +8,7 @@ def lambda_handler(event, context):
     dynamodb = boto3.resource('dynamodb')
     # this will search for dynamoDB table 
     table = dynamodb.Table("result")
-    
+
     flag = "Error!"
     if method == "GET":
         all = table.scan()
@@ -20,8 +20,8 @@ def lambda_handler(event, context):
         message = {"Subject": {"Data" : subject},
                     "Body": {"Html": {"Data": all}}}
 
-        response = client.send_email(Source = "musalli.amer@gmail.com",
-                Destination = {"ToAddresses": ["musalli.amer@gmail.com"]}, Message = message)
+        response = client.send_email(Source = "ahmedbrimawi@gmail.com",
+                Destination = {"ToAddresses": ["ahmedbrimawi@gmail.com"]}, Message = message)
                 
         flag = "The email has been send!"
     

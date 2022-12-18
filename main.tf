@@ -12,7 +12,7 @@ data "archive_file" "lambda-functions" {
 ### SES ###
 
 resource "aws_ses_email_identity" "email" {
-  email = "musalli.amer@gmail.com"
+  email = "ahmedbrimawi@gmail.com"
 }
 ### Policy ###
 data "aws_iam_policy_document" "assume_role" {
