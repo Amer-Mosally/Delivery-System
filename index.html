@@ -259,6 +259,7 @@
     </div>
 
     <script>
+      var url1 = "https://ipbw7odkt1.execute-api.us-east-1.amazonaws.com/serverless_lambda_stage"
       function SendCourierInformation() {
         var name = document.getElementById("Name1").value;
         var IDs = parseInt(document.getElementById("ID1").value);
@@ -268,8 +269,7 @@
 
         // Creating a XHR object
         let xhr = new XMLHttpRequest();
-        let url =
-          "https://0uwr58jax1.execute-api.us-east-1.amazonaws.com/serverless_lambda_stage/courier_management";
+        let url = url1 + "/courier_management";
 
         // open a connection
         xhr.open("POST", url, false);
@@ -309,9 +309,7 @@
         } else {
           urla = "manual_attach";
         }
-        let url =
-          "https://0uwr58jax1.execute-api.us-east-1.amazonaws.com/serverless_lambda_stage/" +
-          urla;
+        let url = url1 + "/" + urla;
 
         // open a connection
         xhr.open("GET", url, false);
@@ -391,9 +389,7 @@
         } else {
           urla = "shipment_management";
         }
-        let url =
-          "https://0uwr58jax1.execute-api.us-east-1.amazonaws.com/serverless_lambda_stage/" +
-          urla;
+        let url = url1 + "/" +urla;
 
         // open a connection
         xhr.open("DELETE", url, false);
@@ -431,8 +427,7 @@
         var Y = document.getElementById("Y2").value;
         // Creating a XHR object
         let xhr = new XMLHttpRequest();
-        let url =
-          "https://0uwr58jax1.execute-api.us-east-1.amazonaws.com/serverless_lambda_stage/shipment_management";
+        let url = url1 + "/shipment_management";
 
         // open a connection
         xhr.open("POST", url, false);
@@ -469,8 +464,7 @@
 
         // Creating a XHR object
         let xhr = new XMLHttpRequest();
-        let url =
-          "https://0uwr58jax1.execute-api.us-east-1.amazonaws.com/serverless_lambda_stage/manual_attach";
+        let url = url1 + "/manual_attach";
 
         // open a connection
         xhr.open("POST", url, false);
@@ -503,8 +497,7 @@
       function SendEmail() {
         // Creating a XHR object
         let xhr = new XMLHttpRequest();
-        let url =
-          "https://0uwr58jax1.execute-api.us-east-1.amazonaws.com/serverless_lambda_stage/email_notification";
+        let url = url1 + "/email_notification";
 
         // open a connection
         xhr.open("GET", url, false);
@@ -534,7 +527,7 @@
 
         var date = document.getElementById("Date3").value;
 
-        let url = "http://54.81.40.242/assign";
+        let url = "http://54.90.63.184/assign";
 
         // open a connection
 
