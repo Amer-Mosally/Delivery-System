@@ -1,5 +1,6 @@
 HOW TO RUN:
-
+1. before initializing your terraform file go to line 15 and change the email to your own. (after running terrafrom file you will get a link to validate your email)
+2. go to email_notification python folder and change emails in lines 23 and 24 to your emails as well.
 1. Initiate the infrastructure by running 'terraform init'
 2. Initilize the database by running the postman collections. Make sure to change the apigetway varible to the provisioned APIGetway's url.
 3. Access the ec2 instance using SSH. Make sure you create a key with the name "cx-project.pem" attached to your account. download this key and place it in the folder. Then run the following commands there:
@@ -14,3 +15,19 @@ sudo ./apigt"
 "date": "year/month/day"
 }
 5. Run the workload provided, or as instructed in the project report
+
+6.before running the front end grab the new api gateway URL and paste it in the index.html file in the url1 variable 
+  at line: 262 paste youe own api gateway url
+  at line 530 : change the IP to your vertual machine ip(EC2)
+
+
+
+
+7.to run the front end we need to launch an instance of chrome that disables CORS protocall 
+	open run and type 
+	chrome.exe --user-data-dir="C://Chrome dev session" --disable-web-security
+	on this version of chrome attatch the index.htm file to it using live server
+
+
+
+
