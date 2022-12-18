@@ -40,6 +40,55 @@ data "aws_iam_policy_document" "DynamoDB" {
     resources = ["*"]
   }
 }
+resource "aws_iam_role" "ec2_role" {
+  name = "ec2_role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+
+  tags = {
+      tag-key = "tag-value"
+  }
+}
+
+resource "aws_iam_instance_profile" "ec2_profile" {
+  name = "ec2_profile"
+  role = "${aws_iam_role.ec2_role.name}"
+}
+
+resource "aws_iam_role_policy" "ec2_policy" {
+  name = "ec2_policy"
+  role = "${aws_iam_role.ec2_role.id}"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "dynamodb:*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_iam_role_policy_attachment" "assume_role" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
   role       = aws_iam_role.iam_for_lambda.name
@@ -238,61 +287,150 @@ resource "aws_dynamodb_table" "result" {
   }
 }
 
-# resource "aws_vpc" "main" {
-#   cidr_block           = "10.0.0.0/16"
-#   instance_tenancy     = "default"
-#   enable_dns_hostnames = true
-#   tags = {
-#     Name = "main"
-#   }
-# }
+resource "aws_vpc" "main" {
+  cidr_block           = "10.0.0.0/16"
+  instance_tenancy     = "default"
+  enable_dns_hostnames = true
+  tags = {
+    Name = "main_vpc"
+  }
+}
 
-# resource "aws_subnet" "my_subnet" {
-#   vpc_id            = aws_vpc.main.id
-#   cidr_block        = "10.0.1.0/24"
-
-
-#   tags = {
-#     Name = "subnet"
-#   }
-# }
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.main.id
 
 
-# resource "aws_security_group" "vpc_secgroup" {
-#     ingress {
-#         from_port        = 22
-#         to_port          = 22
-#         protocol         = "tcp"
-#         cidr_blocks      = ["0.0.0.0/0"]
-#     }
-
-#     ingress {
-#         from_port   = 80
-#         to_port     = 80
-#         protocol    = "tcp"
-#         cidr_blocks = ["0.0.0.0/0"]
-#     }
-
-#     egress {
-#         from_port   = 0
-#         to_port     = 0
-#         protocol    = "-1"
-#         cidr_blocks = ["0.0.0.0/0"]
-#     }
-# }
-
-# resource "aws_instance" "infraserver" {
-#   ami           = "ami-0b0dcb5067f052a63"
-#   instance_type = "t2.micro"
-#     subnet_id   = aws_subnet.my_subnet.id
-#   associate_public_ip_address = true
-#     vpc_security_group_ids = [aws_security_group.vpc_secgroup.id]
+}
 
 
+resource "aws_subnet" "my_subnet" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.1.0/24"
+  map_public_ip_on_launch = true
 
-#   tags = {
-#     Name = "InfraServer"
-#   }
-# }
+
+  tags = {
+    Name = "main_subnet"
+  }
+}
+
+resource "aws_route_table" "public-route-table" {
+vpc_id       = aws_vpc.main.id
+route {
+cidr_block = "0.0.0.0/0"
+gateway_id = aws_internet_gateway.gw.id
+}
+tags       = {
+Name     = "Public Route Table"
+}
+}
+
+resource "aws_route_table_association" "public-subnet-1-route-table-association" {
+subnet_id           = aws_subnet.my_subnet.id
+route_table_id      = aws_route_table.public-route-table.id
+}
+
+
+resource "aws_instance" "infraserver" {
+  ami           = "ami-0b5eea76982371e91"
+  instance_type = "t2.micro"
+  subnet_id   = aws_subnet.my_subnet.id
+  associate_public_ip_address = true
+  key_name = "cx-project"
+  vpc_security_group_ids = ["${aws_security_group.sec_group.id}"]
+
+  tags = {
+    Name = "InfraServer"
+  }
+
+  iam_instance_profile = "${aws_iam_instance_profile.ec2_profile.name}"
+
+  
+    provisioner "file" {
+        source      = "Server-Files/apigt.go"
+        destination = "/home/ec2-user/apigt.go"
+
+        connection {
+            type        = "ssh"
+            user        = "ec2-user"
+            private_key = file("cx-project.pem")
+            host        = self.public_ip
+        }
+    }
+
+      provisioner "file" {
+        source      = "Server-Files/go.mod"
+        destination = "/home/ec2-user/go.mod"
+
+        connection {
+            type        = "ssh"
+            user        = "ec2-user"
+            private_key = file("cx-project.pem")
+            host        = self.public_ip
+        }
+    }
+
+      provisioner "file" {
+        source      = "Server-Files/go.sum"
+        destination = "/home/ec2-user/go.sum"
+
+        connection {
+            type        = "ssh"
+            user        = "ec2-user"
+            private_key = file("cx-project.pem")
+            host        = self.public_ip
+        }
+    }
+
+
+provisioner "remote-exec" {
+        inline = [
+            "sudo yum install golang -y",
+            "go build apigt.go",
+            "sudo ./apigt",
+        ]
+
+        connection {
+            type        = "ssh"
+            user        = "ec2-user"
+            private_key = file("cx-project.pem")
+            host        = self.public_ip
+        }
+    }
+
+}
+
+
+resource "aws_security_group" "sec_group" {
+  vpc_id=aws_vpc.main.id
+  name = "sec_group"
+    ingress {
+        from_port        = 22
+        to_port          = 22
+        protocol         = "tcp"
+        cidr_blocks      = ["0.0.0.0/0"]
+    }
+
+    ingress {
+        from_port   = 80
+        to_port     = 80
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+       ingress {
+        from_port        = 443
+        to_port          = 443
+        protocol         = "tcp"
+        cidr_blocks      = ["0.0.0.0/0"]
+    }
+
+    egress {
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+}
 
 
